@@ -126,11 +126,11 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
           // catch the error.
           try {
             // Ensure that the camera is initialized.
-            await _initializeControllerFuture;
+            await _initializeControllerFutureselfie;
 
             // Attempt to take a picture and get the file `image`
             // where it was saved.
-            final image = await _controller.takePicture();
+            final image = await _controllerselfie.takePicture();
 
             // If the picture was taken, display it on a new screen.
             Navigator.push(

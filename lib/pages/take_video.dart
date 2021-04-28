@@ -67,7 +67,7 @@ class _TakeVideoState extends State<TakeVideo> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          color: Colors.grey,
+          color: Colors.grey[100],
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -154,59 +154,76 @@ class _TakeVideoState extends State<TakeVideo> {
                       child: Text('I prefer my partner perform practices deemed as "safe sex practice" or risk losing my consent', style: TextStyle(fontWeight: FontWeight.bold),),)
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
+                Card(
 
-                    Column(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        SizedBox(
-                          height: 200,
-                          child: Card(
-                            child: _initializeVideoPlayerFuture != null ? FutureBuilder(
-                              future: _initializeVideoPlayerFuture,
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState == ConnectionState.done) {
-                                  // If the VideoPlayerController has finished initialization, use
-                                  // the data it provides to limit the aspect ratio of the VideoPlayer.
-                                  return AspectRatio(
-                                    aspectRatio: _controllervideoplay.value.aspectRatio,
-                                    // Use the VideoPlayer widget to display the video.
-                                    child: VideoPlayer(_controllervideoplay),
-                                  );
-                                } else {
-                                  // If the VideoPlayerController is still initializing, show a
-                                  // loading spinner.
-                                  return Center(child: CircularProgressIndicator());
-                                }
-                              },
-                            ) : SizedBox(height: 0,),
-                          ),
-                        ),
-                        _initializeVideoPlayerFuture != null ? FloatingActionButton(
-                          onPressed: () {
-                            // Wrap the play or pause in a call to `setState`. This ensures the
-                            // correct icon is shown
-                            setState(() {
-                              // If the video is playing, pause it.
-                              if (_controllervideoplay.value.isPlaying) {
-                                _controllervideoplay.pause();
-                              } else {
-                                // If the video is paused, play it.
-                                _controllervideoplay.play();
-                              }
-                            });
-                          },
-                          // Display the correct icon depending on the state of the player.
-                          child: Icon(
-                            _controllervideoplay.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                          ),
-                        ) : SizedBox(height: 0,)
 
+                        Column(
+                          children: [
+                            SizedBox(
+                              height: 200,
+                              child: Card(
+                                child: _initializeVideoPlayerFuture != null ? FutureBuilder(
+                                  future: _initializeVideoPlayerFuture,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState == ConnectionState.done) {
+                                      // If the VideoPlayerController has finished initialization, use
+                                      // the data it provides to limit the aspect ratio of the VideoPlayer.
+                                      return AspectRatio(
+                                        aspectRatio: _controllervideoplay.value.aspectRatio,
+                                        // Use the VideoPlayer widget to display the video.
+                                        child: VideoPlayer(_controllervideoplay),
+                                      );
+                                    } else {
+                                      // If the VideoPlayerController is still initializing, show a
+                                      // loading spinner.
+                                      return Center(child: CircularProgressIndicator());
+                                    }
+                                  },
+                                ) : SizedBox(height: 0,),
+                              ),
+                            ),
+                            Text(DateTime.now().toString()),
+                            _initializeVideoPlayerFuture != null ? FloatingActionButton(
+                              onPressed: () {
+                                // Wrap the play or pause in a call to `setState`. This ensures the
+                                // correct icon is shown
+                                setState(() {
+                                  // If the video is playing, pause it.
+                                  if (_controllervideoplay.value.isPlaying) {
+                                    _controllervideoplay.pause();
+                                  } else {
+                                    // If the video is paused, play it.
+                                    _controllervideoplay.play();
+                                  }
+                                });
+                              },
+                              // Display the correct icon depending on the state of the player.
+                              child: Icon(
+                                _controllervideoplay.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                              ),
+                            ) : SizedBox(height: 0,)
+
+                          ],
+                        ),
                       ],
                     ),
-                  ],
-                )
+                  ),
+                ),
+                Card(
+                  elevation: 20,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Sensteel app and it\'s affiliates are not responsible for providing consent or how this '
+                        'app is used. By signing the box you are giving consent to your partner of physical activities up to'
+                        'and including intercourse for a period of time not to exceed 24 hours from this timestamp: '+
+                        DateTime.now().toString()),
+                  ),
+                ),
               ],
 
             ),

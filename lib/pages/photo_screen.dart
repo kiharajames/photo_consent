@@ -54,7 +54,7 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
   @override
   void dispose() {
     // Dispose of the controller when the widget is disposed.
-    _controller.dispose();
+    _controllerselfie.dispose();
 
     super.dispose();
   }
@@ -73,7 +73,7 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             SizedBox(
-              height: 400,
+              height: 300,
               child: Card(
                 shape: Border.all(color: Colors.black, width: 3, style: BorderStyle.solid),
                 color: Colors.blue[200],

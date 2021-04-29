@@ -3,6 +3,7 @@ import 'package:photo_consent/pages/landing_page.dart';
 import 'package:photo_consent/pages/photo_screen.dart';
 import 'package:photo_consent/style.dart';
 import 'package:photo_consent/pages/take_video.dart';
+import 'package:photo_consent/pages/signing.dart';
 
 class RouteGenerator {
 
@@ -18,6 +19,8 @@ class RouteGenerator {
       case '/take_video':
         TakeVideoScreenData args2 = settings.arguments;
         return MaterialPageRoute(builder: (_) => TakeVideo(camera2: args2.camera2,));
+      case '/signing':
+        return MaterialPageRoute(builder: (_) => Signing());
         default:
         return _errorRoute();
     }

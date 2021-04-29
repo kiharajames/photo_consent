@@ -4,7 +4,11 @@ import 'dart:async';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
-
+import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:ui' as ui;
 import 'package:photo_consent/public_variables.dart';
 import 'package:photo_consent/style.dart';
 
@@ -22,6 +26,8 @@ class _TakeVideoState extends State<TakeVideo> {
   VideoPlayerController _controllervideoplay;
   Future<void> _initializeVideoPlayerFuture;
   bool videoIsRecording = false;
+  final GlobalKey<SfSignaturePadState> signatureGlobalKey = GlobalKey();
+  int showPlayVideoCard = 0;// don't show the card if the video is not recorded
 
   @override
   void initState() {
@@ -42,7 +48,7 @@ class _TakeVideoState extends State<TakeVideo> {
   @override
   void dispose() {
     // Dispose of the controller when the widget is disposed.
-    _controller.dispose();
+    _controllervideoplay.dispose();
 
     super.dispose();
   }
@@ -57,7 +63,6 @@ class _TakeVideoState extends State<TakeVideo> {
     });
 
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -86,54 +91,122 @@ class _TakeVideoState extends State<TakeVideo> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      Row(
+                        children: [
+                          Flexible(
+                            flex: 3,
+                            child: Column(
+                              children: [
+                                Card(
+                                  child: SfSignaturePad(
+                                    minimumStrokeWidth: 1,
+                                    maximumStrokeWidth: 3,
+                                    strokeColor: Colors.blue,
+                                    backgroundColor: Colors.grey,
+                                    key: signatureGlobalKey,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    IconButton(icon: Icon(Icons.check, color: Colors.green,),
+                                        onPressed: () async {
+                                          final data = await signatureGlobalKey.currentState.toImage(pixelRatio: 3.0);
+                                          final bytes = await data.toByteData(format: ui.ImageByteFormat.png);
+                                          final status = await Permission.storage.status;
+                                          if (!status.isGranted) {
+                                            await Permission.storage.request();
+                                          }
 
-                      SizedBox(
-                        height: 230,
-                        child: Card(
-                          elevation: 10,
-                          child: FutureBuilder<void>(
-                            future: _initializeControllerFuture,
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.done) {
-                                // If the Future is complete, display the preview.
-                                return CameraPreview(_controller);
-                              } else {
-                                // Otherwise, display a loading indicator.
-                                return Center(child: CircularProgressIndicator());
-                              }
-                            },
+                                          final time = DateTime.now().toIso8601String().replaceAll('.', ':');
+                                          final name = 'signature_$time';
+
+                                          final result = await ImageGallerySaver.saveImage(bytes.buffer.asUint8List(), name: name);
+                                          final isSuccess = result['isSuccess'];
+
+                                          if (isSuccess) {
+                                            Fluttertoast.showToast(
+                                              msg: "Saved to signature folder",
+                                              gravity: ToastGravity.BOTTOM,
+                                              backgroundColor: Colors.green,
+                                              textColor: Colors.white,
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              fontSize: 16.0,
+                                              timeInSecForIosWeb: 2,
+                                            );
+                                          } else {
+                                            Fluttertoast.showToast(
+                                              msg: "Failed to save signature",
+                                              gravity: ToastGravity.BOTTOM,
+                                              backgroundColor: Colors.red,
+                                              textColor: Colors.white,
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              fontSize: 16.0,
+                                              timeInSecForIosWeb: 2,
+                                            );
+                                          }
+                                        }
+                                    ),
+                                    IconButton(icon: Icon(Icons.clear, color: Colors.red,),
+                                        onPressed: (){
+                                          signatureGlobalKey.currentState.clear();
+                                        })
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ),
-                      FloatingActionButton(
-                          child: Icon(Icons.crop_square),
-                          backgroundColor: Colors.redAccent,
-                          onPressed: () async {
-                            //get storage path
+                          Flexible(
+                            flex:3,
+                            child: Column(
+                              children: [
+                                FutureBuilder<void>(
+                                  future: _initializeControllerFuture,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState == ConnectionState.done) {
+                                      // If the Future is complete, display the preview.
+                                      return CameraPreview(_controller);
+                                    } else {
+                                      // Otherwise, display a loading indicator.
+                                      return Center(child: CircularProgressIndicator());
+                                    }
+                                  },
+                                ),
+                                FloatingActionButton(
+                                    child: Icon(Icons.crop_square),
+                                    backgroundColor: Colors.redAccent,
+                                    onPressed: () async {
+                                      //get storage path
 
-                            final Directory appDirectory = await getApplicationDocumentsDirectory();
-                            final String videoDirectory = '${appDirectory.path}/Videos';
-                            await Directory(videoDirectory).create(recursive: true);
-                            final String currentTime = DateTime.now().millisecondsSinceEpoch.toString();
-                            final String filePath = '$videoDirectory/${currentTime}.mp4';
+                                      final Directory appDirectory = await getApplicationDocumentsDirectory();
+                                      final String videoDirectory = '${appDirectory.path}/Videos';
+                                      await Directory(videoDirectory).create(recursive: true);
+                                      final String currentTime = DateTime.now().millisecondsSinceEpoch.toString();
+                                      final String filePath = '$videoDirectory/${currentTime}.mp4';
 
-                            if (!_controller.value.isRecordingVideo) {
-                              _controller.startVideoRecording();
-                              setState(() {
-                                videoIsRecording = true;
-                              });
-                            }
-                            if (_controller.value.isRecordingVideo) {
-                              XFile videoFile = await _controller.stopVideoRecording();
-                              print(videoFile.path);//and there is more in this XFile object
-                              initVideoState(videoFile.path);
-                              setState(() {
-                                videoIsRecording = false;
-                              });
-                            }
-                          }
+                                      if (!_controller.value.isRecordingVideo) {
+                                        _controller.startVideoRecording();
+                                        setState(() {
+                                          videoIsRecording = true;
+                                          showPlayVideoCard = 1;
+                                        });
+                                      }
+                                      if (_controller.value.isRecordingVideo) {
+                                        XFile videoFile = await _controller.stopVideoRecording();
+                                        print(videoFile.path);//and there is more in this XFile object
+                                        initVideoState(videoFile.path);
+                                        setState(() {
+                                          videoIsRecording = false;
+                                        });
+                                      }
+                                    }
+                                ),
+                                videoIsRecording == true ? Text('Stop recording') : Text('Start Recording')
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      videoIsRecording == true ? Text('Stop recording') : Text('Start Recording')
+
                     ],
                   ),
                 ),
@@ -154,14 +227,12 @@ class _TakeVideoState extends State<TakeVideo> {
                       child: Text('I prefer my partner perform practices deemed as "safe sex practice" or risk losing my consent', style: TextStyle(fontWeight: FontWeight.bold),),)
                   ],
                 ),
-                Card(
-
+                showPlayVideoCard != 0 ? Card(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-
                         Column(
                           children: [
                             SizedBox(
@@ -213,7 +284,7 @@ class _TakeVideoState extends State<TakeVideo> {
                       ],
                     ),
                   ),
-                ),
+                ) : Container(),
                 Card(
                   elevation: 20,
                   child: Padding(
@@ -222,6 +293,18 @@ class _TakeVideoState extends State<TakeVideo> {
                         'app is used. By signing the box you are giving consent to your partner of physical activities up to'
                         'and including intercourse for a period of time not to exceed 24 hours from this timestamp: '+
                         DateTime.now().toString()),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: MaterialButton(
+                    color: Colors.blue,
+                    child: Text('Next'),
+                    minWidth: double.maxFinite,
+                    height: 50,
+                    onPressed: (){
+                      Navigator.pushNamed(context, '/signing');
+                    },
                   ),
                 ),
               ],

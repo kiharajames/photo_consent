@@ -15,7 +15,7 @@ const InputDecoration input2 = InputDecoration(
 );
 
 
-Color myAppBarColor = Colors.blue;
+Color myAppBarColor = Colors.green;
 Color myIconThemeColor = Colors.black;
 
 class MyStyles extends StatefulWidget {

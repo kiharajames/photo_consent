@@ -35,28 +35,20 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightBlue,
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              'Hello there...',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20.0,
-              ),
-
-            ),
+            Image.asset('assets/images/launch_image.png'),
             SizedBox(height: 20,),
             Text(
-              'WELCOME TO MYAPP',
+              'Welcome to SentualApp',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.black,
+                color: Colors.green,
                 fontSize: 28.0,
                 fontWeight: FontWeight.bold,
               ),
@@ -66,7 +58,7 @@ class _LandingPageState extends State<LandingPage> {
               'How many participants are you?',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.black,
+                color: Colors.green,
                 fontSize: 20.0,
               ),
 
@@ -89,18 +81,18 @@ class _LandingPageState extends State<LandingPage> {
                   contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
                   labelText: 'participants',
                   labelStyle: TextStyle(
-                      color: Colors.black87
+                      color: Colors.green
                   ),
 
                   prefixIcon: Icon(
                     Icons.account_circle_sharp,
-                    color: Colors.black,
+                    color: Colors.green,
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black87),
+                    borderSide: BorderSide(color: Colors.green),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black87),
+                    borderSide: BorderSide(color: Colors.green),
                   ),
 
                 ),
@@ -114,9 +106,9 @@ class _LandingPageState extends State<LandingPage> {
               ),
               minWidth: double.maxFinite,
               height: 55.0,
-              color: Colors.black,
+              color: Colors.green,
               onPressed: (){
-                getMyCameras().then((value) => Navigator.pushNamed(context, '/photo_screen', arguments: CameraData(camera: firstCamera, participants: participants.text, selfieCamera: selfieCamera)));
+                getMyCameras().then((value) => Navigator.pushNamed(context, '/photo_screen', arguments: CameraData(camera: firstCamera, participants: participants.text, selfieCamera: selfieCamera, participantsNo: 1)));
               },
               child: Text(
                 'Move on',
@@ -135,9 +127,3 @@ class _LandingPageState extends State<LandingPage> {
   }
 }
 
-class CameraData{
-CameraDescription camera;
-CameraDescription selfieCamera;
-String participants;
-CameraData({this.camera, this.participants, this.selfieCamera});
-}

@@ -4,6 +4,7 @@ import 'package:photo_consent/pages/photo_screen.dart';
 import 'package:photo_consent/style.dart';
 import 'package:photo_consent/pages/take_video.dart';
 import 'package:photo_consent/pages/signing.dart';
+import 'package:photo_consent/public_variables.dart';
 
 class RouteGenerator {
 
@@ -15,12 +16,13 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => LandingPage());
       case '/photo_screen':
         CameraData args = settings.arguments;
-        return MaterialPageRoute(builder: (_) => TakePictureScreen(camera: args.camera,participants: args.participants, selfieCamera: args.selfieCamera,));
+        return MaterialPageRoute(builder: (_) => TakePictureScreen(camera: args.camera,participants: args.participants, selfieCamera: args.selfieCamera, participantNo: args.participantsNo,));
       case '/take_video':
-        TakeVideoScreenData args2 = settings.arguments;
-        return MaterialPageRoute(builder: (_) => TakeVideo(camera2: args2.camera2,));
+        CameraData args = settings.arguments;
+        return MaterialPageRoute(builder: (_) => TakeVideo(camera: args.camera,participants: args.participants, selfieCamera: args.selfieCamera, participantNo: args.participantsNo,));
       case '/signing':
-        return MaterialPageRoute(builder: (_) => Signing());
+        CameraData args = settings.arguments;
+        return MaterialPageRoute(builder: (_) => Signing(camera: args.camera,participants: args.participants, selfieCamera: args.selfieCamera, participantNo: args.participantsNo,));
         default:
         return _errorRoute();
     }

@@ -11,6 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:ui' as ui;
 import 'package:photo_consent/public_variables.dart';
 import 'package:photo_consent/style.dart';
+import 'package:tapioca/tapioca.dart';
 
 class TakeVideo extends StatefulWidget {
   final CameraDescription camera;
@@ -29,8 +30,13 @@ class _TakeVideoState extends State<TakeVideo> {
   VideoPlayerController _controllervideoplay;
   Future<void> _initializeVideoPlayerFuture;
   bool videoIsRecording = false;
+  String checkNextPage;
   final GlobalKey<SfSignaturePadState> signatureGlobalKey = GlobalKey();
   int showPlayVideoCard = 0;// don't show the card if the video is not recorded
+  //editing the video
+  final tapiocaBalls = [
+    TapiocaBall.textOverlay("${DateTime.now().toString()}",200,600,20,Color(0xFF00E344)),
+  ];
 
   @override
   void initState() {
@@ -133,14 +139,23 @@ class _TakeVideoState extends State<TakeVideo> {
                               setState(() {
                                 videoIsRecording = true;
                                 showPlayVideoCard = 1;
+                                checkNextPage = null;
                               });
                             }
                             if (_controller.value.isRecordingVideo) {
                               XFile videoFile = await _controller.stopVideoRecording();
                               print(videoFile.path);//and there is more in this XFile object
-                              initVideoState(videoFile.path);
+                              //initVideoState(videoFile.path);
+                              var tempDir = await getTemporaryDirectory();
+                              final path = '${tempDir.path}/result.mp4';
+                              final cup = Cup(Content(videoFile.path), tapiocaBalls);
+                              cup.suckUp(path).then((_) {
+                                ImageGallerySaver.saveFile(path);
+                                initVideoState(path);
+                              });
                               setState(() {
                                 videoIsRecording = false;
+                                checkNextPage = "yes";
                               });
                             }
                           }
@@ -201,7 +216,6 @@ class _TakeVideoState extends State<TakeVideo> {
                                 ) : SizedBox(height: 0,),
                               ),
                             ),
-                            Text(DateTime.now().toString()),
                             _initializeVideoPlayerFuture != null ? FloatingActionButton(
                               onPressed: () {
                                 // Wrap the play or pause in a call to `setState`. This ensures the
@@ -228,17 +242,8 @@ class _TakeVideoState extends State<TakeVideo> {
                     ),
                   ),
                 ) : Container(),
-                Card(
-                  elevation: 20,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('Sensteel app and it\'s affiliates are not responsible for providing consent or how this '
-                        'app is used. By signing the box you are giving consent to your partner of physical activities up to'
-                        'and including intercourse for a period of time not to exceed 24 hours from this timestamp: '+
-                        DateTime.now().toString()),
-                  ),
-                ),
-                Padding(
+
+                checkNextPage == null ? Container() : Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: MaterialButton(
                     color: Colors.green,
@@ -246,9 +251,22 @@ class _TakeVideoState extends State<TakeVideo> {
                     minWidth: double.maxFinite,
                     height: 50,
                     onPressed: (){
-                      Navigator.pushNamed(context, '/signing', arguments: CameraData(
-                          selfieCamera: widget.selfieCamera, camera: widget.camera,
-                          participants: widget.participants, participantsNo: widget.participantNo));
+                      if(checkValue == false){
+                        Fluttertoast.showToast(
+                          msg: "Please check the box above,'I prefer my partner...' ",
+                          gravity: ToastGravity.BOTTOM,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          toastLength: Toast.LENGTH_SHORT,
+                          fontSize: 16.0,
+                          timeInSecForIosWeb: 2,
+                        );
+                      }else{
+                        Navigator.pushNamed(context, '/signing', arguments: CameraData(
+                            selfieCamera: widget.selfieCamera, camera: widget.camera,
+                            participants: widget.participants, participantsNo: widget.participantNo));
+                      }
+
                     },
                   ),
                 ),

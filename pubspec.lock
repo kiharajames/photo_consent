@@ -70,7 +70,7 @@ packages:
       name: cupertino_icons
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.2"
+    version: "1.0.3"
   fake_async:
     dependency: transitive
     description:
@@ -233,6 +233,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
+  screenshot:
+    dependency: "direct main"
+    description:
+      name: screenshot
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -279,14 +286,21 @@ packages:
       name: syncfusion_flutter_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "19.1.58"
+    version: "19.1.59"
   syncfusion_flutter_signaturepad:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_signaturepad
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "19.1.58-beta"
+    version: "19.1.59-beta"
+  tapioca:
+    dependency: "direct main"
+    description:
+      name: tapioca
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2+1"
   term_glyph:
     dependency: transitive
     description:

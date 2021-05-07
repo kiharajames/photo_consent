@@ -5,6 +5,7 @@ import 'package:photo_consent/style.dart';
 import 'package:photo_consent/pages/take_video.dart';
 import 'package:photo_consent/pages/signing.dart';
 import 'package:photo_consent/public_variables.dart';
+import 'package:photo_consent/pages/safe_sex.dart';
 
 class RouteGenerator {
 
@@ -23,6 +24,9 @@ class RouteGenerator {
       case '/signing':
         CameraData args = settings.arguments;
         return MaterialPageRoute(builder: (_) => Signing(camera: args.camera,participants: args.participants, selfieCamera: args.selfieCamera, participantNo: args.participantsNo,));
+      case '/safe_sex':
+        var args = settings.arguments;
+        return MaterialPageRoute(builder: (_) => SafeSex(participants: args,));
         default:
         return _errorRoute();
     }

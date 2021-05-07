@@ -25,6 +25,8 @@ class Signing extends StatefulWidget {
 class _SigningState extends State<Signing> {
   final GlobalKey<SfSignaturePadState> signatureGlobalKey = GlobalKey();
   String checkNextPage;
+
+
   @override
   void initState() {
     super.initState();
@@ -153,11 +155,11 @@ class _SigningState extends State<Signing> {
                   padding: const EdgeInsets.all(8.0),
                   child: MaterialButton(
                     color: Colors.green,
-                    child: Text('Done'),
+                    child: Text('Next'),
                     minWidth: double.maxFinite,
                     height: 50,
                     onPressed: (){
-                      Navigator.pushNamedAndRemoveUntil(context, '/', (Route<dynamic> route) => false);
+                      Navigator.pushNamed(context, '/safe_sex', arguments: widget.participants);
                     },
                   ),
                 ),

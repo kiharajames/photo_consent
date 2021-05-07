@@ -75,12 +75,10 @@ class _LandingPageState extends State<LandingPage> {
                   controller: participants,
                   style: TextStyle(color: Colors.black87 ),
                   decoration: InputDecoration(
-                    hintText: '3',
                     hintStyle: TextStyle(
                       color: Colors.grey,
                     ),
                     contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
-                    labelText: 'participants',
                     labelStyle: TextStyle(
                         color: Colors.green
                     ),

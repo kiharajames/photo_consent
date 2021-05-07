@@ -67,7 +67,7 @@ class _SigningState extends State<Signing> {
                         ', consent cannot ever be achieved. \n\n'
                         'I understand Consent and Affirmative Consent can be revoked at any moment and is an ongoing process. \n\n'
                         'Sentual App and it\'s affiliates are not responsible for any actions resulting from the usage of this app'
-                        '. Sentual App is only attempting to record Affirmative consent as \'a snapshot in time\' and does not'
+                        '. Sentual App is only attempting to record Affirmative consent as \'a snapshot in time\' and does not '
                         'make any claims of consent or affirmative consent between parties after the usage of this app.'),
                   ),
                 ),

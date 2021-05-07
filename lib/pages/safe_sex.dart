@@ -22,6 +22,7 @@ class _SafeSexState extends State<SafeSex> {
   ScreenshotController screenshotController = ScreenshotController();
   Uint8List _imageFile;
   bool checkValue = true;
+  var myCheckBoxVar = {};
 
   @override
   Widget build(BuildContext context) {
@@ -46,20 +47,21 @@ class _SafeSexState extends State<SafeSex> {
                 controller: screenshotController,
                 child: Column(
                   children: [
+                    Text('Check the box if you prefer to use safe sex practices:', style: TextStyle(color: Colors.white),),
                     for(var i =1; i<=int.parse(widget.participants); i++) ListTile(
                       leading: Checkbox(
                         checkColor: Colors.green,
                         activeColor: Colors.white,
-                        value: checkValue,
+                        value: myCheckBoxVar['$i'] == null ? checkValue : myCheckBoxVar['$i'],
                         onChanged: (bool value){
                           if(value == false){
                             setState(() {
-                              checkValue=value;
+                              myCheckBoxVar[i.toString()] = value;
                               checkBoxNo += 1;
                             });
                           }else{
                             setState(() {
-                              checkValue=value;
+                              myCheckBoxVar[i.toString()] = value;
                               checkBoxNo -=1;
                             });
                           }

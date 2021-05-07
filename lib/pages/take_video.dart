@@ -164,25 +164,9 @@ class _TakeVideoState extends State<TakeVideo> {
                     ],
                   ),
                 ),
-                Row(
-                  children: [
-                    Flexible(
-                      flex: 2,
-                      child: Checkbox(value: checkValue,
-                          onChanged: (bool value){
-                        setState(() {
-                          checkValue = value;
-                        });
-                          }
-                      ),
-                    ),
-                    Flexible(
-                      flex: 4,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('I prefer my partner perform practices deemed as "safe sex practice" or risk losing my consent', style: TextStyle(fontWeight: FontWeight.bold),),
-                      ),)
-                  ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Video shows below after you stop recording:'),
                 ),
                 showPlayVideoCard != 0 ? Card(
                   elevation: 10,
@@ -242,6 +226,40 @@ class _TakeVideoState extends State<TakeVideo> {
                     ),
                   ),
                 ) : Container(),
+                Row(
+                  children: [
+                    Flexible(
+                      flex: 2,
+                      child: Checkbox(value: checkValue,
+                          onChanged: (bool value){
+                        setState(() {
+                          checkValue = value;
+                        });
+                          }
+                      ),
+                    ),
+                    Flexible(
+                      flex: 4,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('I am aware that STDs are infectious and are passed from one person to another '
+                            'during sexual activity. Anybody who has oral sex, anal sex, vaginal sex, genital skin-to-skin '
+                            'contact, or who shares sexual fluids with another person can get STDs. \n\n'
+                            'Safer sex (often called “safe sex”) means taking steps to protect yourself '
+                            'and your partner from STDs when you have sex.\n\n'
+                            'There are lots of ways you can make sex safer. One of the best ways is by using a barrier — like'
+                            ' condoms, internal condoms, dental dams, and/or latex or nitrile gloves — every single time you '
+                            'have oral, anal, or vaginal sex, or do anything that can pass sexual fluids (like sharing sex toys). '
+                            'Barriers protect you and your partner from sexual fluids and some skin-to-skin contact, which can both '
+                            'spread STDs.\n\n'
+                            'I prefer my partner performs practices generally accepted as "safe sex," to limit the sharing of sexual '
+                            'fluids. I understand no barrier is perfect.\n\n'
+                            'If my partner/s do not adhere to the best of thier ability to perform \'safer sex\' practices, then my '
+                            'partner/s risk losing my consent.\n',
+                          style: TextStyle(fontWeight: FontWeight.bold),),
+                      ),)
+                  ],
+                ),
 
                 checkNextPage == null ? Container() : Padding(
                   padding: const EdgeInsets.all(8.0),

@@ -14,19 +14,20 @@ class RouteGenerator {
 
     switch (settings.name) {
       case '/':
+        CameraData args = settings.arguments;
         return MaterialPageRoute(builder: (_) => LandingPage());
       case '/photo_screen':
         CameraData args = settings.arguments;
-        return MaterialPageRoute(builder: (_) => TakePictureScreen(camera: args.camera,participants: args.participants, selfieCamera: args.selfieCamera, participantNo: args.participantsNo,));
+        return MaterialPageRoute(builder: (_) => TakePictureScreen(camera: args.camera,participants: args.participants, selfieCamera: args.selfieCamera, participantNo: args.participantsNo, safeSexAcceptance: args.safeSexAcceptance,));
       case '/take_video':
         CameraData args = settings.arguments;
-        return MaterialPageRoute(builder: (_) => TakeVideo(camera: args.camera,participants: args.participants, selfieCamera: args.selfieCamera, participantNo: args.participantsNo,));
+        return MaterialPageRoute(builder: (_) => TakeVideo(camera: args.camera,participants: args.participants, selfieCamera: args.selfieCamera, participantNo: args.participantsNo,  safeSexAcceptance: args.safeSexAcceptance));
       case '/signing':
         CameraData args = settings.arguments;
-        return MaterialPageRoute(builder: (_) => Signing(camera: args.camera,participants: args.participants, selfieCamera: args.selfieCamera, participantNo: args.participantsNo,));
+        return MaterialPageRoute(builder: (_) => Signing(camera: args.camera,participants: args.participants, selfieCamera: args.selfieCamera, participantNo: args.participantsNo,  safeSexAcceptance: args.safeSexAcceptance));
       case '/safe_sex':
-        var args = settings.arguments;
-        return MaterialPageRoute(builder: (_) => SafeSex(participants: args,));
+        CameraData args = settings.arguments;
+        return MaterialPageRoute(builder: (_) => SafeSex(camera: args.camera,participants: args.participants, selfieCamera: args.selfieCamera, participantNo: args.participantsNo,  safeSexAcceptance: args.safeSexAcceptance));
         default:
         return _errorRoute();
     }

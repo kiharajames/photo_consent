@@ -1,16 +1,15 @@
 import 'dart:typed_data';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:camera/camera.dart';
 import 'dart:async';
-import 'dart:io';
-import 'package:flutter/services.dart' show rootBundle;
-
 import 'package:photo_consent/public_variables.dart';
 import 'package:photo_consent/style.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -20,15 +19,14 @@ class _CameraController extends CameraController{
 
 }
 
-
 class TakePictureScreen extends StatefulWidget {
   final String participants;
   final int participantNo;
   final CameraDescription camera;
   final CameraDescription selfieCamera;
+  final Map safeSexAcceptance;
 
-
-  TakePictureScreen({Key key, this.participants, this.camera, this.selfieCamera, this.participantNo}): super(key: key);
+  TakePictureScreen({Key key, this.participants, this.camera, this.selfieCamera, this.participantNo, this.safeSexAcceptance}): super(key: key);
 
   @override
   _TakePictureScreenState createState() => _TakePictureScreenState();
@@ -158,6 +156,7 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
                   camera: widget.camera,
                   participantNo: widget.participantNo,
                   participants: widget.participants,
+                  safeSexAcceptance: widget.safeSexAcceptance,
                 ),
               ),
             );
@@ -178,9 +177,9 @@ class DisplayPictureScreen extends StatefulWidget {
   final String participants;
   final int participantNo;
   final CameraDescription camera;
+  final safeSexAcceptance;
 
-
-  const DisplayPictureScreen({Key key, this.imagePath, this.selfieCamera, this.participants, this.participantNo, this.camera}) : super(key: key);
+  const DisplayPictureScreen({Key key, this.imagePath, this.selfieCamera, this.participants, this.participantNo, this.camera, this.safeSexAcceptance}) : super(key: key);
 
   @override
   _DisplayPictureScreenState createState() => _DisplayPictureScreenState();
@@ -332,6 +331,38 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                       _imageFile = image;
                       checkNextPage = "yes";
                     });
+                    final time = DateTime.now().toIso8601String().replaceAll('.', ':');
+                    final name = 'photo_$time';
+
+                    // try  {
+                    //   final String dir =
+                    //       (await getApplicationDocumentsDirectory())
+                    //           .path;
+                    //   final String fullPath = '$dir/$name.png';
+                    //   File capturedFile = File(fullPath);
+                    //   await capturedFile
+                    //       .writeAsBytes(image.buffer.asUint8List());
+                    //   print(capturedFile.path);
+                    //
+                    //   await GallerySaver.saveImage('${capturedFile.path}')
+                    //       .then((value) {
+                    //       setState(() {
+                    //         checkNextPage = "yes";
+                    //       });
+                    //     Fluttertoast.showToast(
+                    //       msg: "Screenshot taken, image saved",
+                    //       gravity: ToastGravity.BOTTOM,
+                    //       backgroundColor: Colors.green,
+                    //       textColor: Colors.white,
+                    //       toastLength: Toast.LENGTH_SHORT,
+                    //       fontSize: 16.0,
+                    //       timeInSecForIosWeb: 2,
+                    //     );
+                    //   });
+                    // }catch(e){
+                    //   print(e);
+                    // }
+
                     final result =
                     await ImageGallerySaver.saveImage(image); // Save image to gallery,  Needs plugin  https://pub.dev/packages/image_gallery_saver
                     Fluttertoast.showToast(
@@ -359,7 +390,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                 onPressed: (){
                   Navigator.pushNamed(context, '/take_video', arguments: CameraData(
                       selfieCamera: widget.selfieCamera, camera: widget.camera,
-                      participants: widget.participants, participantsNo: widget.participantNo));
+                      participants: widget.participants, participantsNo: widget.participantNo, safeSexAcceptance: widget.safeSexAcceptance));
                 },
 
               ),

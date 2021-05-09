@@ -25,12 +25,12 @@ dependencies:
     sdk: flutter
   camera:
   video_player:
-  path_provider:
+  path_provider: ^2.0.1
   path:
   syncfusion_flutter_signaturepad: ^19.1.58-beta
   image_gallery_saver: ^1.6.9
-  permission_handler: ^5.1.0+2
-  fluttertoast: ^7.1.6
+  permission_handler: ^7.1.0
+  fluttertoast: ^8.0.6
   screenshot: ^0.3.0
   tapioca: ^1.0.2+1
 

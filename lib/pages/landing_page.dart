@@ -12,6 +12,7 @@ class _LandingPageState extends State<LandingPage> {
   TextEditingController participants = TextEditingController();
   CameraDescription firstCamera;
   CameraDescription selfieCamera;
+  var consentMap = new Map();
 
   Future<void> getMyCameras() async{
     // Ensure that plugin services are initialized
@@ -21,6 +22,7 @@ class _LandingPageState extends State<LandingPage> {
     // Get a specific camera from the list of available cameras.
     final myfirstCamera = cameras.first;
     final myselfieCamera = cameras.last;
+
 
     setState(() {
       firstCamera = myfirstCamera;
@@ -128,7 +130,7 @@ class _LandingPageState extends State<LandingPage> {
                   }else{
 
                   }
-                  getMyCameras().then((value) => Navigator.pushNamed(context, '/photo_screen', arguments: CameraData(camera: firstCamera, participants: participants.text, selfieCamera: selfieCamera, participantsNo: 1)));
+                  getMyCameras().then((value) => Navigator.pushNamed(context, '/photo_screen', arguments: CameraData(camera: firstCamera, participants: participants.text, selfieCamera: selfieCamera, participantsNo: 1, safeSexAcceptance: consentMap)));
                 },
                 child: Text(
                   'Move on',

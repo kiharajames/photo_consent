@@ -8,5 +8,6 @@ class CameraData{
   CameraDescription selfieCamera;
   String participants;
   int participantsNo;
-  CameraData({this.camera, this.participants, this.selfieCamera, this.participantsNo});
+  var safeSexAcceptance = new Map();
+  CameraData({this.camera, this.participants, this.selfieCamera, this.participantsNo, this.safeSexAcceptance});
 }

@@ -1,21 +1,23 @@
+import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:photo_consent/public_variables.dart';
-import 'package:video_player/video_player.dart';
 import 'package:flutter/foundation.dart';
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:photo_consent/style.dart';
+import 'package:path_provider/path_provider.dart';
 
 class Signing extends StatefulWidget {
   final CameraDescription camera;
   final CameraDescription selfieCamera;
   final String participants;
   final int participantNo;
-  Signing({Key key, this.selfieCamera, this.participants, this.camera, this.participantNo}) : super(key: key);
+  final safeSexAcceptance;
+  Signing({Key key, this.selfieCamera, this.participants, this.camera, this.participantNo, this.safeSexAcceptance}) : super(key: key);
 
   @override
   _SigningState createState() => _SigningState();
@@ -102,6 +104,38 @@ class _SigningState extends State<Signing> {
                               final time = DateTime.now().toIso8601String().replaceAll('.', ':');
                               final name = 'signature_$time';
 
+                              //create file
+                              //   try  {
+                              //   final String dir =
+                              //       (await getApplicationDocumentsDirectory())
+                              //           .path;
+                              //   final String fullPath = '$dir/$name.png';
+                              //   File capturedFile = File(fullPath);
+                              //   await capturedFile
+                              //       .writeAsBytes(bytes.buffer.asUint8List());
+                              //   print(capturedFile.path);
+                              //
+                              //   await GallerySaver.saveImage(capturedFile.path)
+                              //       .then((value) {
+                              //     Fluttertoast.showToast(
+                              //       msg: "Saved to signature folder",
+                              //       gravity: ToastGravity.BOTTOM,
+                              //       backgroundColor: Colors.green,
+                              //       textColor: Colors.white,
+                              //       toastLength: Toast.LENGTH_SHORT,
+                              //       fontSize: 16.0,
+                              //       timeInSecForIosWeb: 2,
+                              //     );
+                              //       setState(() {
+                              //         checkNextPage = "yes";
+                              //
+                              //     });
+                              //   });
+                              // }catch(e){
+                              //     print(e);
+                              //   }
+
+
                               final result = await ImageGallerySaver.saveImage(bytes.buffer.asUint8List(), name: name);
                               final isSuccess = result['isSuccess'];
 
@@ -148,7 +182,7 @@ class _SigningState extends State<Signing> {
                     height: 50,
                     onPressed: (){
                       Navigator.pushNamed(context, '/photo_screen', arguments: CameraData(selfieCamera: widget.selfieCamera, camera: widget.camera,
-                          participants: widget.participants, participantsNo: (widget.participantNo)+1));
+                          participants: widget.participants, participantsNo: (widget.participantNo)+1, safeSexAcceptance: widget.safeSexAcceptance));
                     },
                   ),
                 ) : checkNextPage == null ? Container() : Padding(
@@ -159,7 +193,9 @@ class _SigningState extends State<Signing> {
                     minWidth: double.maxFinite,
                     height: 50,
                     onPressed: (){
-                      Navigator.pushNamed(context, '/safe_sex', arguments: widget.participants);
+                      Navigator.pushNamed(context, '/safe_sex', arguments: CameraData(
+                          selfieCamera: widget.selfieCamera, camera: widget.camera,
+                          participants: widget.participants, participantsNo: widget.participantNo, safeSexAcceptance: widget.safeSexAcceptance));
                     },
                   ),
                 ),

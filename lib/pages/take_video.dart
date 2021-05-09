@@ -18,7 +18,8 @@ class TakeVideo extends StatefulWidget {
   final CameraDescription selfieCamera;
   final String participants;
   final int participantNo;
-  TakeVideo({Key key, this.selfieCamera, this.participants, this.camera, this.participantNo}) : super(key: key);
+  final safeSexAcceptance;
+  TakeVideo({Key key, this.selfieCamera, this.participants, this.camera, this.participantNo, this.safeSexAcceptance}) : super(key: key);
   @override
   _TakeVideoState createState() => _TakeVideoState();
 }
@@ -37,6 +38,7 @@ class _TakeVideoState extends State<TakeVideo> {
   final tapiocaBalls = [
     TapiocaBall.textOverlay("${DateTime.now().toString()}",200,600,20,Color(0xFF00E344)),
   ];
+
 
   @override
   void initState() {
@@ -149,7 +151,9 @@ class _TakeVideoState extends State<TakeVideo> {
                               var tempDir = await getTemporaryDirectory();
                               final path = '${tempDir.path}/result.mp4';
                               final cup = Cup(Content(videoFile.path), tapiocaBalls);
-                              cup.suckUp(path).then((_) {
+                              cup.suckUp(path).then((_) async {
+                                // await GallerySaver.saveImage(path);
+                                //this above has an issue with android 11
                                 ImageGallerySaver.saveFile(path);
                                 initVideoState(path);
                               });
@@ -234,6 +238,7 @@ class _TakeVideoState extends State<TakeVideo> {
                           onChanged: (bool value){
                         setState(() {
                           checkValue = value;
+
                         });
                           }
                       ),
@@ -269,21 +274,14 @@ class _TakeVideoState extends State<TakeVideo> {
                     minWidth: double.maxFinite,
                     height: 50,
                     onPressed: (){
-                      if(checkValue == false){
-                        Fluttertoast.showToast(
-                          msg: "Please check the box above,'I prefer my partner...' ",
-                          gravity: ToastGravity.BOTTOM,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          toastLength: Toast.LENGTH_SHORT,
-                          fontSize: 16.0,
-                          timeInSecForIosWeb: 2,
-                        );
-                      }else{
+                      var consentMap = new Map();
+                      print(widget.safeSexAcceptance);
+                      consentMap = widget.safeSexAcceptance;
+                      consentMap['${widget.participantNo}'] = checkValue;
                         Navigator.pushNamed(context, '/signing', arguments: CameraData(
                             selfieCamera: widget.selfieCamera, camera: widget.camera,
-                            participants: widget.participants, participantsNo: widget.participantNo));
-                      }
+                            participants: widget.participants, participantsNo: widget.participantNo, safeSexAcceptance: consentMap));
+
 
                     },
                   ),

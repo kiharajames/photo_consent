@@ -28,7 +28,7 @@ packages:
       name: camera_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   characters:
     dependency: transitive
     description:
@@ -113,7 +113,7 @@ packages:
       name: fluttertoast
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "7.1.8"
+    version: "8.0.6"
   image_gallery_saver:
     dependency: "direct main"
     description:
@@ -176,7 +176,7 @@ packages:
       name: path_provider_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   path_provider_windows:
     dependency: transitive
     description:
@@ -197,14 +197,14 @@ packages:
       name: permission_handler
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.1.0+2"
+    version: "7.1.0"
   permission_handler_platform_interface:
     dependency: transitive
     description:
       name: permission_handler_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.2"
+    version: "3.3.0"
   platform:
     dependency: transitive
     description:
@@ -218,7 +218,7 @@ packages:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.3"
+    version: "2.0.0"
   process:
     dependency: transitive
     description:

@@ -80,14 +80,17 @@ class _SigningState extends State<Signing> {
                 ),
                 Column(
                   children: [
-                    Card(
-                      elevation: 10,
-                      child: SfSignaturePad(
-                        minimumStrokeWidth: 1,
-                        maximumStrokeWidth: 3,
-                        strokeColor: Colors.green,
-                        backgroundColor: Colors.white,
-                        key: signatureGlobalKey,
+                    SizedBox(
+                      height: 100,
+                      child: Card(
+                        elevation: 10,
+                        child: SfSignaturePad(
+                          minimumStrokeWidth: 1,
+                          maximumStrokeWidth: 3,
+                          strokeColor: Colors.green,
+                          backgroundColor: Colors.white,
+                          key: signatureGlobalKey,
+                        ),
                       ),
                     ),
                     Row(
@@ -173,36 +176,29 @@ class _SigningState extends State<Signing> {
                     ),
                   ],
                 ),
-                widget.participantNo != int.parse(widget.participants) ? Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: checkNextPage == null ? Container() : MaterialButton(
-                    color: Colors.green,
-                    child: Text('Next Participant'),
-                    minWidth: double.maxFinite,
-                    height: 50,
-                    onPressed: (){
-                      Navigator.pushNamed(context, '/photo_screen', arguments: CameraData(selfieCamera: widget.selfieCamera, camera: widget.camera,
-                          participants: widget.participants, participantsNo: (widget.participantNo)+1, safeSexAcceptance: widget.safeSexAcceptance));
-                    },
-                  ),
-                ) : checkNextPage == null ? Container() : Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: MaterialButton(
-                    color: Colors.green,
-                    child: Text('Next'),
-                    minWidth: double.maxFinite,
-                    height: 50,
-                    onPressed: (){
-                      Navigator.pushNamed(context, '/safe_sex', arguments: CameraData(
-                          selfieCamera: widget.selfieCamera, camera: widget.camera,
-                          participants: widget.participants, participantsNo: widget.participantNo, safeSexAcceptance: widget.safeSexAcceptance));
-                    },
-                  ),
-                ),
               ],
             ),
           ),
         ),
+      ),
+      floatingActionButton: widget.participantNo != int.parse(widget.participants) ? Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: checkNextPage == null ? Container() : FloatingActionButton(
+          backgroundColor: Colors.green,
+          child: Text('Next'),
+          onPressed: (){
+            Navigator.pushNamed(context, '/photo_screen', arguments: CameraData(selfieCamera: widget.selfieCamera, camera: widget.camera,
+                participants: widget.participants, participantsNo: (widget.participantNo)+1, safeSexAcceptance: widget.safeSexAcceptance));
+          },
+        ),
+      )  : checkNextPage == null ? Container() : FloatingActionButton(
+        backgroundColor: Colors.green,
+        child: Text('Next'),
+        onPressed: (){
+          Navigator.pushNamed(context, '/safe_sex', arguments: CameraData(
+              selfieCamera: widget.selfieCamera, camera: widget.camera,
+              participants: widget.participants, participantsNo: widget.participantNo, safeSexAcceptance: widget.safeSexAcceptance));
+        },
       ),
     );
   }
